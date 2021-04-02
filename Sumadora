@@ -1,0 +1,178 @@
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+
+public class Practica1 {
+
+	public static void main(String[] args) {
+		
+		ventana1();
+		ventana2();
+	
+	}
+	
+	static void ventana1(){
+		
+		GUIcbox ventanita = new GUIcbox();
+		ventanita.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+	    ventanita.setSize( 350, 120 ); 
+	    ventanita.setLocation(400, 400);
+	    ventanita.setVisible( true ); 
+	    
+	}
+	
+	static void ventana2() {
+		
+		Sumadora ventanita = new Sumadora();
+		ventanita.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		ventanita.setSize (155,180);
+		ventanita.setLocation(800, 400);
+		ventanita.setVisible(true);
+		
+	}
+	
+	public static void print(String what){
+		System.out.println(what);
+	}
+	
+}
+
+
+@SuppressWarnings("serial") 
+class GUIcbox extends JFrame {
+
+	private JTextField textField; 
+	private JCheckBox boldJCheckBox; 
+	private JCheckBox italicJCheckBox; 
+
+	private ItemListener handler = new ItemListener() {
+		public void itemStateChanged(ItemEvent e) {
+		      
+	         Font font = null; //Almacenamos el font
+
+	         if ( boldJCheckBox.isSelected() && italicJCheckBox.isSelected() )
+	            font = new Font( "Serif", Font.BOLD + Font.ITALIC, 14 );
+	         else if ( boldJCheckBox.isSelected() )
+	            font = new Font( "Serif", Font.BOLD, 14 );
+	         else if ( italicJCheckBox.isSelected() )
+	            font = new Font( "Serif", Font.ITALIC, 14 );
+	         else
+	            font = new Font( "Serif", Font.PLAIN, 14 );
+
+	         textField.setFont( font ); 
+	      			
+		} 
+	};
+	
+	
+	public GUIcbox() {
+	      super( "JCheckBox" );
+	      setLayout( new FlowLayout() ); 
+
+	      textField = new JTextField( "Estilo", 20 );
+	      textField.setFont( new Font( "Serif", Font.PLAIN, 14 ) );
+	      add( textField ); 
+
+	      boldJCheckBox = new JCheckBox( "Negrita" ); 
+	      italicJCheckBox = new JCheckBox( "Cursiva" ); 
+	      add( boldJCheckBox ); 
+	      add( italicJCheckBox ); 
+
+	      
+	      boldJCheckBox.addItemListener( handler );
+	      italicJCheckBox.addItemListener( handler );
+	}	
+}
+
+@SuppressWarnings("serial")
+
+	private JTextField inputA;
+	private JTextField inputB;
+	private JTextField resultado;
+	private JButton botonSuma;
+	private int A;
+	private int B;
+	private int result;
+	
+
+	
+	public Sumadora() {
+		
+		super("Sumadora");
+		setLayout(new FlowLayout());
+		
+		inputA = new JTextField("Valor de A");
+		inputB = new JTextField("Valor de B");
+		resultado = new JTextField("A+B");
+		botonSuma = new JButton("click para sumar");
+		
+		inputA.addFocusListener(this);
+		inputB.addFocusListener(this);
+		botonSuma.addMouseListener(this);
+
+		
+		add(inputA); 
+		add(inputB);
+		add(botonSuma);
+		add(resultado);
+		
+	}
+
+	@Override
+	public void focusGained(FocusEvent e) {
+		if(e.getSource()==inputA){
+			inputA.setText("");
+		} else if (e.getSource()==inputB){
+			inputB.setText("");
+		} else {}
+	}
+
+	@Override
+	public void focusLost(FocusEvent e) {
+		if (e.getSource() == inputA){
+			A = Integer.parseInt(inputA.getText());
+		} else if (e.getSource() == inputB){
+			B = Integer.parseInt(inputB.getText());
+		} else {}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		result = A+B;
+		resultado.setText(result+"");
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		
+		
+	}
+}
