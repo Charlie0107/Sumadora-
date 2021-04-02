@@ -1,0 +1,157 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
+import javax.swing.JTextArea;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.Graphics;
+import java.awt.Dimension;
+
+
+class Color extends JPanel 
+  {
+    JLabel rgbValue = new JLabel("HEX Ref");
+    JLabel valorDiametro = new JLabel("Diametro");
+    JTextArea detail = new JTextArea("Dimensiones", 3, 45);
+    JSlider sliderD, sliderR, sliderG, sliderB;
+    Double pi = 3.14;
+    Wheel oval = new Wheel();
+    JPanel panel = new JPanel();
+
+
+    public ColorSlider() 
+      {
+        panel.setLayout(new GridLayout(6, 1, 16, 16));
+        add(panel, BorderLayout.NORTH);
+
+        sliderD = getSlider(0, 300, 50, 150, 50);
+        sliderR = getSlider(0, 255, 0, 50, 5);
+        sliderG = getSlider(0, 255, 0, 50, 5);
+        sliderB = getSlider(0, 255, 0, 50, 5);
+
+        panel.add(sliderD); 
+        panel.add(sliderR); 
+        panel.add(sliderG); 
+        panel.add(sliderB); 
+
+        rgbValue.setBackground(Color.white);
+        rgbValue.setForeground(Color.black);
+        rgbValue.setOpaque(true);
+        panel.add(rgbValue);
+
+      
+        valorDiametro.setBackground(Color.white);
+        valorDiametro.setForeground(Color.black);
+        valorDiametro.setOpaque(true);
+        panel.add(valorDiametro);
+
+        add(oval);
+        add(detail); 
+      } 
+
+      
+  public JSlider getSlider(int min, int max, int init, int mjrTkSp, int mnrTkSp) 
+      {
+        JSlider slider = new JSlider(JSlider.HORIZONTAL, min, max, init);
+        slider.setPaintTicks(true);
+        slider.setMajorTickSpacing(mjrTkSp);
+        slider.setMinorTickSpacing(mnrTkSp);
+        slider.setPaintLabels(true);
+        slider.addChangeListener(new SliderListener());
+        return slider;
+      } 
+
+  class Wheel extends JPanel
+        {
+       
+        int redValue, greenValue, blueValue;
+        private int diam = 64; 
+        
+        @Override
+        public void paintComponent(Graphics g)
+        {
+        super.paintComponent(g);
+        g.fillOval(32, 32, diam, diam); 
+        }
+       
+        public void setDiam(int newDiam)
+        {
+        
+        diam = (newDiam >= 0 ? newDiam : 64);
+        repaint(); 
+        } 
+      
+        public int getDiam()
+          {
+            return diam;
+          } 
+        
+        public Dimension getTamano()
+          {
+            return new Dimension(380, 380);
+          }
+      
+        public Dimension getTallamin()
+          {
+            return getTamano();
+          } 
+     
+        public void setColor() 
+          {
+            Color color = new Color(redValue, greenValue, blueValue);
+            setForeground(color);
+          } 
+       
+        public String getColorAsHex() 
+          {
+            Color color = new Color(redValue, greenValue, blueValue);
+            return Integer.toString(color.getRGB() & 0xffffff, 16);
+          }
+      } 
+
+  class SliderListener implements ChangeListener 
+      {
+
+        public void stateChanged(ChangeEvent e) 
+        {
+          JSlider slider = (JSlider) e.getSource();
+
+          if (slider == sliderD) {
+            oval.diam = slider.getValue();
+            displayDiam();
+          } else if (slider == sliderR) {
+            oval.redValue = slider.getValue();
+            displayRGBColor();
+          } else if (slider == sliderG) {
+            oval.greenValue = slider.getValue();
+            displayRGBColor();
+          } else if (slider == sliderB) {
+            oval.blueValue = slider.getValue();
+            displayRGBColor();
+          } // ends final if statement of stateChanged Listener
+
+          oval.repaint();
+
+          detail.setText("Diametro:  " + oval.diam + "\n" 
+            + "Circunferencia :  " + oval.diam * pi + "\n"
+            + "Area:  " + (oval.diam * oval.diam) * pi);
+        } 
+
+
+        public void displayRGBColor() 
+          {
+            oval.setColor();
+
+            rgbValue.setText("HEX: "+ oval.getColorAsHex());
+          } 
+ 
+        public void displayDiam() 
+         {
+            oval.setDiam(sliderD.getValue());
+            valorDiametro.setText("Diametro: "+ oval.diam);
+          }
