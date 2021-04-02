@@ -1,0 +1,229 @@
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import javax.swing.JComponent;
+
+
+public class Imagen extends JComponent {
+
+    private BufferedImage image = null;
+
+    protected final Dimension size = new Dimension(0, 0);
+
+    protected boolean tamano = true;
+
+    protected final Dimension tamanoMaximo = new Dimension(0, 0);
+
+    protected boolean tamanoMax = true;
+
+    protected final Dimension sizeMinimum = new Dimension(0, 0);
+
+    protected boolean autoTamanoMinimo = true;
+
+    protected final Dimension tamanos = new Dimension(0, 0);
+
+    }
+    protected boolean tamanosAuto = true;
+
+    @Override
+    public int getHeight() {
+        return size.height;
+    }
+
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    @Override
+    public Dimension getTamanoMaxi() {
+        return new Dimension(tamanoMaximo);
+    }
+
+ 
+    public boolean getMaximumtamano() {
+        return tamanoMax;
+    }
+
+    @Override
+    public Dimension getMinimumSize() {
+        return new Dimension(sizeMinimum);
+    }
+
+   
+    public boolean getMinimumtamano() {
+        return autoTamanoMinimo;
+    }
+
+    @Override
+    public Dimension getTamanoPreferido() {
+        return new Dimension(tamanos);
+    }
+
+  
+    public boolean getPreferredtamano() {
+        return tamanosAuto;
+    }
+
+    @Override
+    public Dimension getSize() {
+        return new Dimension(size);
+    }
+
+    @Override
+    public Dimension getSize(Dimension rv) {
+        if (rv == null) {
+            rv = new Dimension(size);
+        } else {
+            rv.setSize(size);
+        }
+        return rv;
+    }
+
+    public boolean gettamano() {
+        return tamano;
+    }
+
+    @Override
+    public int getWidth() {
+        return size.width;
+    }
+
+ 
+    public boolean isEmpty() {
+        return image == null;
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(image, 0, 0, null);
+    }
+
+    protected void setAutoSize() {
+        if (isEmpty()) {
+            size.setSize(0, 0);
+        } else {
+            size.setSize(image.getWidth(), image.getHeight());
+        }
+    }
+
+
+    protected void setAutotamanoMaximo() {
+        if (isEmpty()) {
+            tamanoMaximo.setSize(0, 0);
+        } else {
+            tamanoMaximo.setSize(image.getWidth(), image.getHeight());
+        }
+    }
+
+    protected void setAutoMini() {
+        if (isEmpty()) {
+            sizeMinimum.setSize(0, 0);
+        } else {
+            sizeMinimum.setSize(image.getWidth(), image.getHeight());
+        }
+    }
+
+
+    protected void setAutotamanos() {
+        if (isEmpty()) {
+            tamanos.setSize(0, 0);
+        } else {
+            tamanos.setSize(image.getWidth(), image.getHeight());
+        }
+    }
+
+
+    public void setImage(BufferedImage image) {
+        this.image = image;
+        if (tamano         ) setAutoSize();
+        if (autoTamanoMinimo  ) setAutoMini();
+        if (tamanosAuto) setAutotamanos();
+        if (tamanoMax  ) setAutotamanoMaximo();
+        
+    }
+
+    private void setImageFix(BufferedImage image) {
+        setImage(image);
+    }
+
+    @Override
+    public final void setMaximumSize(Dimension maximumSize) {
+        if (maximumSize == null) {
+            setAutotamanoMaximo();
+            tamanoMax = true;
+        } else {
+            tamanoMaximo.setSize(maximumSize.width, maximumSize.height);
+            tamanoMax = false;
+        }
+    }
+
+    @Override
+    public final void setMinimumSize(Dimension minimumSize) {
+        if (minimumSize == null) {
+            setAutoMini();
+            autoTamanoMinimo = true;
+        } else {
+            sizeMinimum.setSize(minimumSize.width, minimumSize.height);
+            autoTamanoMinimo = false;
+        }
+    }
+
+    @Override
+    public final void setPreferredSize(Dimension preferredSize) {
+        if (preferredSize == null) {
+            setAutotamanos();
+            tamanosAuto = true;
+        } else {
+            tamanos.setSize(preferredSize.width, preferredSize.height);
+            tamanosAuto = false;
+        }
+    }
+
+    @Override
+    public final void setSize(Dimension d) {
+        // if d is null, will throw NPE, just like parent method
+        setSize(d.width, d.height);
+    }
+
+    @Override
+    public void setSize(int width, int height) {
+        size.setSize(width, height);
+        tamano = false;
+    }
+
+
+    public void setSizesAuto() {
+        setAutoSize();
+        setAutoMini();
+        setAutotamanos();
+        setAutotamanoMaximo();
+        tamano          = true;
+        autoTamanoMinimo   = true;
+        tamanosAuto = true;
+        tamanoMax   = true;
+    }
+    public Imagen() {}
+
+
+    public Imagen(BufferedImage image) {
+        setImageFix(image);
+    }
+
+    public Imagen(Dimension size,
+     Dimension minimumSize, Dimension preferredSize, Dimension maximumSize) {
+     
+        if (size != null) setSize(size);
+       
+        setMinimumSize(minimumSize);
+        setPreferredSize(preferredSize);
+        setMaximumSize(maximumSize);
+    }
+
+
+    public Imagen(BufferedImage image, Dimension size,
+     Dimension minimumSize, Dimension preferredSize, Dimension maximumSize) {
+        this(size, minimumSize, preferredSize, maximumSize);
+        setImageFix(image);
+    }
+}
